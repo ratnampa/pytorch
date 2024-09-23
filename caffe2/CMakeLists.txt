@@ -927,6 +927,7 @@ elseif(USE_CUDA)
   set(CUDA_LINK_LIBRARIES_KEYWORD)
   torch_compile_options(torch_cuda)  # see cmake/public/utils.cmake
   target_compile_definitions(torch_cuda PRIVATE USE_CUDA)
+  target_link_libraries(torch_cuda PRIVATE fmt::fmt-header-only)
 
   if(USE_CUFILE)
     target_link_libraries(torch_cuda PRIVATE torch::cufile)
@@ -1326,6 +1327,7 @@ if(USE_ROCM)
     ${ROCM_SOURCE_DIR}/rocblas/include
     ${ROCM_SOURCE_DIR}/hipsparse/include
     )
+  target_link_libraries(torch_hip PRIVATE fmt::fmt-header-only)
   if(USE_FLASH_ATTENTION)
     target_compile_definitions(torch_hip PRIVATE USE_FLASH_ATTENTION)
   endif()
@@ -1552,7 +1554,11 @@ if(USE_XPU)
   add_dependencies(torch_xpu torch_cpu)
 
   if(MSVC)
+<<<<<<< HEAD
     target_link_libraries(torch_xpu PRIVATE torch_cpu_library)
+=======
+    target_link_libraries(torch_xpu PUBLIC torch_cpu_library)
+>>>>>>> 77cc7a375036a7dc43224ba71bb405ad796a38be
   else()
     include(CheckLinkerFlag)
 
